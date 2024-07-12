@@ -1,46 +1,46 @@
-const isUpperCase = (letter: string) => letter.toLowerCase() !== letter;
+const isUpperCase = (letter: string) => letter === letter.toUpperCase();
 
 const isVowel = (letter: string) => {
   const lowerCaseLetter = letter.toLowerCase();
-  if (
-    lowerCaseLetter === "a" ||
-    lowerCaseLetter === "e" ||
-    lowerCaseLetter === "i" ||
-    lowerCaseLetter === "o" ||
-    lowerCaseLetter === "u"
-  )
-    return true;
-  else return false;
+  return "aeiou".includes(lowerCaseLetter);
 };
 
-const convertToPigLatinWord = (word: string) => {
-  let finalStr = "";
-  const indices = new Set();
+const convertVowelWordToPigLatin = (word: string) => {
+  return word + "yay";
+};
+
+const convertConsonantWordToPigLatin = (word: string) => {
+  let tempStr = "";
+  let chosenIndex = 0;
+
   for (let i = 0; i < word.length; i++) {
-    if (isUpperCase(word[i])) indices.add(i);
+    if (isVowel(word[i])) {
+      chosenIndex = i;
+      break;
+    } else {
+      tempStr += word[i];
+    }
+  }
+
+  return word.substring(chosenIndex) + tempStr + "ay";
+};
+
+const convertSingleWordToPigLatin = (word: string) => {
+  let finalStr = "";
+  const indicesWithUpperCase = new Set<number>();
+
+  for (let i = 0; i < word.length; i++) {
+    if (isUpperCase(word[i])) indicesWithUpperCase.add(i);
   }
 
   if (isVowel(word[0])) {
-    finalStr = word + "yay";
+    finalStr = convertVowelWordToPigLatin(word);
   } else {
-    let tempStr = "";
-    let chosenIndex = 0;
-
-    for (let i = 0; i < word.length; i++) {
-      if (isVowel(word[i])) {
-        chosenIndex = i;
-        break;
-      } else {
-        tempStr += word[i];
-      }
-    }
-
-    finalStr =
-      word.substring(chosenIndex) + word.substring(0, chosenIndex) + "ay";
+    finalStr = convertConsonantWordToPigLatin(word);
   }
 
-  if (indices.size === 0) return finalStr;
-  if (indices.size > 1) {
+  if (indicesWithUpperCase.size === 0) return finalStr;
+  if (indicesWithUpperCase.size > 1) {
     return finalStr.toUpperCase();
   } else {
     return finalStr[0].toUpperCase() + finalStr.substring(1).toLowerCase();
@@ -50,20 +50,9 @@ const convertToPigLatinWord = (word: string) => {
 export const convertToPigLatin = (initialStr: string) => {
   const allWords = initialStr.split(" ");
 
-  const pigLatinWords = allWords.map((word) => convertToPigLatinWord(word));
+  const pigLatinWords = allWords.map((word) =>
+    convertSingleWordToPigLatin(word)
+  );
 
   return pigLatinWords.join(" ");
 };
-
-const readline = require("readline").createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
-
-readline.question(
-  "Enter a string to convert to Pig Latin: ",
-  (input: string) => {
-    console.log(convertToPigLatin(input));
-    readline.close();
-  }
-);

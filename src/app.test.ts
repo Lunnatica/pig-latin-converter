@@ -1,7 +1,7 @@
 import { convertToPigLatin } from "./app";
 
 describe("convertToPigLatin", () => {
-  describe("Req 1", () => {
+  describe("When the sentence is all lowercase", () => {
     it("should return the correct conversation for inputs", () => {
       expect(convertToPigLatin("pleased to meet you")).toEqual(
         "easedplay otay eetmay ouyay"
@@ -25,7 +25,7 @@ describe("convertToPigLatin", () => {
     });
   });
 
-  describe("Req 2", () => {
+  describe("When there is casing in the sentences", () => {
     it("should respect casing of sentences", () => {
       expect(convertToPigLatin("Pleased to meet you")).toBe(
         "Easedplay otay eetmay ouyay"
